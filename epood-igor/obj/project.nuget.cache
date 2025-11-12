@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "FgaDcisYLRQ=",
+  "dgSpecHash": "rWLabPp5M7s=",
   "success": true,
-  "projectFilePath": "C:\\Users\\opilane\\source\\repos\\epood-igor\\epood-igor.csproj",
+  "projectFilePath": "C:\\Users\\opilane\\source\\repos\\SQL-C-\\epood-igor\\epood-igor.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\opilane\\.nuget\\packages\\runtime.native.system.data.sqlclient.sni\\4.4.0\\runtime.native.system.data.sqlclient.sni.4.4.0.nupkg.sha512",
     "C:\\Users\\opilane\\.nuget\\packages\\runtime.win-arm64.runtime.native.system.data.sqlclient.sni\\4.4.0\\runtime.win-arm64.runtime.native.system.data.sqlclient.sni.4.4.0.nupkg.sha512",

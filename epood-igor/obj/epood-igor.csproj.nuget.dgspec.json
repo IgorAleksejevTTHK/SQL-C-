@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\opilane\\source\\repos\\epood-igor\\epood-igor.csproj": {}
+    "C:\\Users\\opilane\\source\\repos\\SQL-C-\\epood-igor\\epood-igor.csproj": {}
   },
   "projects": {
-    "C:\\Users\\opilane\\source\\repos\\epood-igor\\epood-igor.csproj": {
+    "C:\\Users\\opilane\\source\\repos\\SQL-C-\\epood-igor\\epood-igor.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\opilane\\source\\repos\\epood-igor\\epood-igor.csproj",
+        "projectUniqueName": "C:\\Users\\opilane\\source\\repos\\SQL-C-\\epood-igor\\epood-igor.csproj",
         "projectName": "epood-igor",
-        "projectPath": "C:\\Users\\opilane\\source\\repos\\epood-igor\\epood-igor.csproj",
+        "projectPath": "C:\\Users\\opilane\\source\\repos\\SQL-C-\\epood-igor\\epood-igor.csproj",
         "packagesPath": "C:\\Users\\opilane\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\opilane\\source\\repos\\epood-igor\\obj\\",
+        "outputPath": "C:\\Users\\opilane\\source\\repos\\SQL-C-\\epood-igor\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

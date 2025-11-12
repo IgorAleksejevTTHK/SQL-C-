@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("epood-igor")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+57594b7a23df3a21d798d8aab4438f0a7e897a0d")]
 [assembly: System.Reflection.AssemblyProductAttribute("epood-igor")]
 [assembly: System.Reflection.AssemblyTitleAttribute("epood-igor")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

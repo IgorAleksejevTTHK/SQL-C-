@@ -2,6 +2,7 @@ using Microsoft.VisualBasic.ApplicationServices;
 using System.Data;
 using System.Data.SqlClient;
 using System.Numerics;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace epood_igor
 {
@@ -10,24 +11,81 @@ namespace epood_igor
 
 
         SqlCommand command;
-        SqlConnection connect = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\opilane\source\repos\epood-igor\Toode_DB.mdf;Integrated Security=True;Integrated Security=True;");
+        SqlConnection connect = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\opilane\source\repos\SQL-C-\epood-igor\Toode_DB.mdf;Integrated Security=True;Integrated Security=True;");
         SqlDataAdapter adapter_toode, adapter_kategooria;
         public Form1()
         {
             InitializeComponent();
             NaitaKategooriad();
+            NaitaAndmed();
         }
-
-
+        public void NaitaAndmed()
+        {
+            DataTable dt_toode = new DataTable();
+            adapter_toode = new SqlDataAdapter("SELECT ToodeTabel.Id,ToodeTabel.Toodenimetus,ToodeTabel.Kogus,"
+                + "ToodeTabel.Hind, ToodeTabel.Pilt, ToodeTabel.Bpilt, KategooriaTabel.Kategooria_nimetus" +
+                " as Kategooria_nimetus FROM Toodetabel INNER JOIN KategooriaTabel on Toodetabel.Kategooriad=KategooriaTabel.Id", connect);
+            adapter_toode.Fill(dt_toode);
+            dataGridView1.Columns.Clear();
+            dataGridView1.DataSource = dt_toode;
+            DataGridViewComboBoxColumn combo_kat = new DataGridViewComboBoxColumn();
+            combo_kat.DataPropertyName = "Kategooria_nimetus";
+            HashSet<string> keys = new HashSet<string>();
+            foreach (DataRow item in dt_toode.Rows)
+            {
+                string kat_n = item["Kategooria_nimetus"].ToString();
+                if (!keys.Contains(kat_n))
+                {
+                    keys.Add(kat_n);
+                    combo_kat.Items.Add(kat_n);
+                }
+            }
+            dataGridView1.Columns.Add(combo_kat);
+            Toode_pb.Image = Image.FromFile(Path.Combine(Path.GetFullPath(@"C:\Users\opilane\source\repos\SQL-C-\epood-igor\Pildid"), "goofy.jpg"));
+            connect.Close();
+        }
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
         {
 
         }
+        Form popupForm;
+        private void Loopilt(Image image, int r)
+        {
+            popupForm = new Form();
+            popupForm.FormBorderStyle = FormBorderStyle.None;
+            popupForm.StartPosition = FormStartPosition.Manual;
+            popupForm.Size = new Size(200, 200);
+
+            PictureBox pictureBox = new PictureBox();
+            pictureBox.Image = image;
+            pictureBox.Dock = DockStyle.Fill;
+            pictureBox.SizeMode = PictureBoxSizeMode.Zoom;
+
+            popupForm.Controls.Add(pictureBox);
+
+            System.Drawing.Rectangle cellRectangle = dataGridView1.GetCellDisplayRectangle(4, r, true);
+            System.Drawing.Point popupLocation = dataGridView1.PointToScreen(cellRectangle.Location);
+
+            popupForm.Location = new System.Drawing.Point(popupLocation.X + cellRectangle.Width, popupLocation.Y);
+            popupForm.Show();
+        }
 
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-
+            if (e.RowIndex >= 0 && e.ColumnIndex == 4)
+            {
+                imageData = dataGridView1.Rows[e.RowIndex].Cells["Bpilt"].Value as byte[];
+                if (imageData != null)
+                {
+                    using (MemoryStream ms = new MemoryStream(imageData))
+                    {
+                        Image image = Image.FromStream(ms);
+                        Loopilt(image, e.RowIndex);
+                    }
+                }
+            }
         }
+
 
         private void kustuta_btn_Click(object sender, EventArgs e)
         {
@@ -137,5 +195,64 @@ namespace epood_igor
                 MessageBox.Show("Palun sisesta toote nimi!");
             }
         }
+        byte[] imageData;
+
+
+        private void dataGridView1_MouseLeave(object sender, EventArgs e)
+        {
+
+        }
+        int Id = 0;
+        private void lisa_btn_Click(object sender, EventArgs e)
+        {
+            if (Toode_txt.Text.Trim() != string.Empty &&
+                Kogus_txt.Text.Trim() != string.Empty &&
+                Hind_txt.Text.Trim() != string.Empty && Kat_Box.SelectedItem != null)
+            {
+                try
+                {
+                    connect.Open();
+                    command = new SqlCommand("SELECT Id FROM KategooriaTabel where Kategooria_nimetus=@kat", connect);
+                    command.Parameters.AddWithValue("@kat", Kat_Box.Text);
+                    command.ExecuteNonQuery();
+                    Id = Convert.ToInt32(command.ExecuteScalar());
+                    command = new SqlCommand("INSERT INTO Toodetabel (Toodenimetus, Kogus, Hind, Pilt, Bpilt, Kategooriad) " +
+                        "VALUES (@toode, @kogus, @hind, @pilt, @bpilt, @kat)", connect);
+                    command.Parameters.AddWithValue("@toode", Toode_txt.Text);
+                    command.Parameters.AddWithValue("@kogus", Kogus_txt.Text);
+                    command.Parameters.AddWithValue("@hind", Hind_txt.Text);
+                    extension = Path.GetExtension(open.FileName);
+                    command.Parameters.AddWithValue("@pilt", Toode_txt.Text + extension);
+                    imageData = File.ReadAllBytes(open.FileName);
+                    command.Parameters.AddWithValue("@bpilt", imageData);
+                    command.Parameters.AddWithValue("@kat", Id);
+                    command.ExecuteNonQuery();
+                    connect.Close();
+                    NaitaAndmed();
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("Andmebaasiga viga");
+                }
+            }
+        }
+
+        private void dataGridView1_MouseEnter(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0 && e.ColumnIndex == 4)
+            {
+                imageData = dataGridView1.Rows[e.RowIndex].Cells["Bpilt"].Value as byte[];
+                if (imageData != null)
+                {
+                    using (MemoryStream ms = new MemoryStream(imageData))
+                    {
+                        Image image = Image.FromStream(ms);
+                        Loopilt(image, e.RowIndex);
+                    }
+                }
+            }
+        }
     }
-}
+}   
+
+

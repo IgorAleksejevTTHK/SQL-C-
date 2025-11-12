@@ -57,6 +57,7 @@
             dataGridView1.Size = new Size(616, 150);
             dataGridView1.TabIndex = 0;
             dataGridView1.CellContentClick += dataGridView1_CellContentClick;
+            dataGridView1.MouseLeave += dataGridView1_MouseLeave;
             // 
             // Toode_pb
             // 
@@ -163,6 +164,7 @@
             lisa_btn.TabIndex = 10;
             lisa_btn.Text = "Lisa";
             lisa_btn.UseVisualStyleBackColor = true;
+            lisa_btn.Click += lisa_btn_Click;
             // 
             // label1
             // 
