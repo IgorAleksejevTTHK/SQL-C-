@@ -47,3 +47,7 @@ C:\Users\opilane\Source\Repos\SQL-C-\epood-igor\obj\Debug\net9.0-windows\refint\
 C:\Users\opilane\Source\Repos\SQL-C-\epood-igor\obj\Debug\net9.0-windows\epood-igor.pdb
 C:\Users\opilane\Source\Repos\SQL-C-\epood-igor\obj\Debug\net9.0-windows\epood-igor.genruntimeconfig.cache
 C:\Users\opilane\Source\Repos\SQL-C-\epood-igor\obj\Debug\net9.0-windows\ref\epood-igor.dll
+C:\Users\opilane\Source\Repos\SQL-C-\epood-igor\obj\Debug\net9.0-windows\epood_igor.Properties.Resources.resources
+C:\Users\opilane\Source\Repos\SQL-C-\epood-igor\bin\Debug\net9.0-windows\BouncyCastle.Cryptography.dll
+C:\Users\opilane\Source\Repos\SQL-C-\epood-igor\bin\Debug\net9.0-windows\itextsharp.dll
+C:\Users\opilane\Source\Repos\SQL-C-\epood-igor\obj\Debug\net9.0-windows\epood_igor.KassaForm.resources

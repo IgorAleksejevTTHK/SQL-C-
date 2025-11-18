@@ -2,6 +2,7 @@ using Microsoft.VisualBasic.ApplicationServices;
 using System.Data;
 using System.Data.SqlClient;
 using System.Numerics;
+using System.Windows.Forms;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace epood_igor
@@ -101,10 +102,135 @@ namespace epood_igor
                 NaitaKategooriad();
             }
         }
-
+        private SaveFileDialog? _saveFileDialog;
+        private OpenFileDialog? _openFileDialog;
         private void button6_Click(object sender, EventArgs e)
         {
+            // Identify selected product (based on clicked row)
+            if (dataGridView1.CurrentRow == null)
+            {
+                MessageBox.Show("Vali vähemalt üks tooterida, mida uuendada!");
+                return;
+            }
 
+            int id = Convert.ToInt32(dataGridView1.CurrentRow.Cells["Id"].Value);
+            if (id <= 0)
+            {
+                MessageBox.Show("Vale ID väärtus!");
+                return;
+            }
+
+            try
+            {
+                if (connect.State != ConnectionState.Open)
+                    connect.Open();
+
+                // --- Build dynamic UPDATE statement ---
+                List<string> updateFields = new List<string>();
+                SqlCommand cmd = new SqlCommand();
+                cmd.Connection = connect;
+
+                // Update only fields the user provided
+                if (!string.IsNullOrWhiteSpace(Toode_txt.Text))
+                {
+                    updateFields.Add("Toodenimetus=@toode");
+                    cmd.Parameters.AddWithValue("@toode", Toode_txt.Text.Trim());
+                }
+
+                if (!string.IsNullOrWhiteSpace(Kogus_txt.Text))
+                {
+                    if (int.TryParse(Kogus_txt.Text, out int kogus))
+                    {
+                        updateFields.Add("Kogus=@kogus");
+                        cmd.Parameters.AddWithValue("@kogus", kogus);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Kogus peab olema arv!");
+                        connect.Close();
+                        return;
+                    }
+                }
+
+                if (!string.IsNullOrWhiteSpace(Hind_txt.Text))
+                {
+                    if (decimal.TryParse(
+                            Hind_txt.Text.Replace(',', '.'),
+                            System.Globalization.NumberStyles.Any,
+                            System.Globalization.CultureInfo.InvariantCulture,
+                            out decimal hind))
+                    {
+                        updateFields.Add("Hind=@hind");
+                        cmd.Parameters.AddWithValue("@hind", hind);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Hind peab olema number!");
+                        connect.Close();
+                        return;
+                    }
+                }
+
+                if (Toode_pb.Image != null && _openFileDialog != null && !string.IsNullOrEmpty(_openFileDialog.FileName))
+                {
+                    if (File.Exists(_openFileDialog.FileName))
+                    {
+                        string ext = Path.GetExtension(_openFileDialog.FileName);
+                        string fileName = Toode_txt.Text.Trim() + ext;
+
+                        updateFields.Add("Pilt=@pilt, Bpilt=@bpilt");
+
+                        byte[] imageBytes = File.ReadAllBytes(_openFileDialog.FileName);
+                        cmd.Parameters.AddWithValue("@pilt", fileName);
+                        cmd.Parameters.AddWithValue("@bpilt", imageBytes);
+                    }
+                }
+
+                // Update category if selected
+                if (Kat_Box.SelectedItem != null)
+                {
+                    updateFields.Add("Kategooriad=@kat");
+                    SqlCommand getCatCmd = new SqlCommand("SELECT Id FROM KategooriaTabel WHERE Kategooria_nimetus=@nim", connect);
+                    getCatCmd.Parameters.AddWithValue("@nim", Kat_Box.Text);
+                    int katId = Convert.ToInt32(getCatCmd.ExecuteScalar());
+                    cmd.Parameters.AddWithValue("@kat", katId);
+                }
+
+                // --- Execute update if there are any fields to modify ---
+                if (updateFields.Count == 0)
+                {
+                    MessageBox.Show("Pole midagi uuendada! Täida vähemalt üks väli.");
+                    connect.Close();
+                    return;
+                }
+
+                string updateQuery =
+                    "UPDATE ToodeTabel SET " +
+                    string.Join(", ", updateFields) +
+                    " WHERE Id=@id";
+
+                cmd.CommandText = updateQuery;
+                cmd.Parameters.AddWithValue("@id", id);
+
+                int rowsAffected = cmd.ExecuteNonQuery();
+                connect.Close();
+
+                if (rowsAffected > 0)
+                {
+                    MessageBox.Show("Toote andmed on uuendatud!");
+                    NaitaAndmed();
+                }
+                else
+                {
+                    MessageBox.Show("Uuendus ebaõnnestus — kontrolli andmeid!");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Viga andmete uuendamisel: " + ex.Message);
+                if (connect.State == ConnectionState.Open)
+                    connect.Close();
+            }
         }
 
         private void label1_Click(object sender, EventArgs e)
@@ -252,7 +378,51 @@ namespace epood_igor
                 }
             }
         }
+
+        private void kustuta_btn_Click_1(System.Object? sender, System.EventArgs e)
+
+        {
+            Id = Convert.ToInt32(dataGridView1.CurrentRow?.Cells["Id"].Value);
+            MessageBox.Show(Id.ToString());
+            if (Id != 0)
+            {
+                command = new SqlCommand("DELETE FROM ToodeTabel WHERE Id=@id", connect);
+                connect.Open();
+                command.Parameters.AddWithValue("@id", Id);
+                command.ExecuteNonQuery();
+                connect.Close();
+                NaitaAndmed();
+                MessageBox.Show("Toode on kustutatud!");
+            }
+            else
+            {
+                MessageBox.Show("Vali toode, mida kustutada soovid!");
+            }
+        }
+
+        private void puhasta_btn_Click(object sender, EventArgs e)
+        {
+            Toode_txt.Text = "";
+            Kogus_txt.Text = "";
+            Hind_txt.Text = "";
+            Kat_Box.SelectedItem = null;
+            using (FileStream fs = new FileStream(Path.Combine(Path.GetFullPath(@"..\..\..\Pildid"), "epood.png"), FileMode.Open, FileAccess.Read))
+            {
+                Toode_pb.Image = Image.FromStream(fs);
+            }
+        }
+
+        private void Toode_pb_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+
+            KassaForm k = new KassaForm();
+            k.ShowDialog();
+        }
     }
 }   
-
 

@@ -45,6 +45,7 @@
             label2 = new Label();
             label3 = new Label();
             label4 = new Label();
+            button1 = new Button();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)Toode_pb).BeginInit();
             SuspendLayout();
@@ -68,6 +69,7 @@
             Toode_pb.SizeMode = PictureBoxSizeMode.StretchImage;
             Toode_pb.TabIndex = 1;
             Toode_pb.TabStop = false;
+            Toode_pb.Click += Toode_pb_Click;
             // 
             // Toode_txt
             // 
@@ -126,6 +128,7 @@
             puhasta_btn.TabIndex = 8;
             puhasta_btn.Text = "Puhasta";
             puhasta_btn.UseVisualStyleBackColor = true;
+            puhasta_btn.Click += puhasta_btn_Click;
             // 
             // otsi_fail_btn
             // 
@@ -145,6 +148,7 @@
             kustuta_btn.TabIndex = 12;
             kustuta_btn.Text = "Kustuta";
             kustuta_btn.UseVisualStyleBackColor = true;
+            kustuta_btn.Click += kustuta_btn_Click_1;
             // 
             // uuenda_btn
             // 
@@ -208,12 +212,23 @@
             label4.TabIndex = 16;
             label4.Text = "Kategooriad:";
             // 
+            // button1
+            // 
+            button1.Location = new Point(8, 12);
+            button1.Name = "button1";
+            button1.Size = new Size(75, 23);
+            button1.TabIndex = 17;
+            button1.Text = "avaKassa";
+            button1.UseVisualStyleBackColor = true;
+            button1.Click += button1_Click;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.InactiveCaption;
             ClientSize = new Size(800, 450);
+            Controls.Add(button1);
             Controls.Add(label4);
             Controls.Add(label3);
             Controls.Add(label2);
@@ -258,5 +273,6 @@
         private Label label2;
         private Label label3;
         private Label label4;
+        private Button button1;
     }
 }
