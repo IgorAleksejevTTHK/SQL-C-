@@ -106,7 +106,7 @@ namespace epood_igor
         private OpenFileDialog? _openFileDialog;
         private void button6_Click(object sender, EventArgs e)
         {
-            // Identify selected product (based on clicked row)
+
             if (dataGridView1.CurrentRow == null)
             {
                 MessageBox.Show("Vali vähemalt üks tooterida, mida uuendada!");

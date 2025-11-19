@@ -62,54 +62,38 @@ namespace epood_igor
 
         private void btnLooCheck_Click(object sender, EventArgs e)
         {
-            if (ostuTabel.Rows.Count == 0)
+            if (dataGridProducts.CurrentRow == null)
             {
-                MessageBox.Show("Tšekk on tühi!");
+                MessageBox.Show("Vali toode!");
                 return;
             }
 
-            // ПОЛНЫЙ путь к папке, куда сохранять PDF
-            string folder = @"C:\Users\opilane\source\repos\SQL-C-\epood-igor/Arved";
+            int tooteId = Convert.ToInt32(dataGridProducts.CurrentRow.Cells["Id"].Value);
+            int kogus = (int)numKogus.Value; // количество, которое выбрал клиент
 
-            // Создаём, если нет
-            Directory.CreateDirectory(folder);
-
-            // Имя файла
-            string filePath = Path.Combine(folder, $"arve_{DateTime.Now:yyyyMMdd_HHmmss}.pdf");
-
-            // Создание PDF
-            iTextSharp.text.Document pdf = new iTextSharp.text.Document();
-            PdfWriter.GetInstance(pdf, new FileStream(filePath, FileMode.Create));
-            pdf.Open();
-
-            pdf.Add(new Paragraph("TŠEKK"));
-            pdf.Add(new Paragraph("Kuupäev: " + DateTime.Now));
-            pdf.Add(new Paragraph(" "));
-
-            PdfPTable tabel = new PdfPTable(4);
-            tabel.AddCell("Toode");
-            tabel.AddCell("Kogus");
-            tabel.AddCell("Hind");
-            tabel.AddCell("Summa");
-
-            decimal kokku = 0;
-
-            foreach (DataRow r in ostuTabel.Rows)
+            if (kogus <= 0)
             {
-                tabel.AddCell(r["Toode"].ToString());
-                tabel.AddCell(r["Kogus"].ToString());
-                tabel.AddCell(r["Hind"].ToString());
-                tabel.AddCell(r["Summa"].ToString());
-
-                kokku += Convert.ToDecimal(r["Summa"]);
+                MessageBox.Show("Kogus peab olema vähemalt 1!");
+                return;
             }
 
-            pdf.Add(tabel);
-            pdf.Add(new Paragraph(" "));
-            pdf.Add(new Paragraph("KOKKU: " + kokku + " €"));
-            pdf.Close();
+            // Проверяем наличие на складе
+            connect.Open();
+            SqlCommand c = new SqlCommand("SELECT Kogus FROM ToodeTabel WHERE Id=@id", connect);
+            c.Parameters.AddWithValue("@id", tooteId);
+            int laos = Convert.ToInt32(c.ExecuteScalar());
+            connect.Close();
 
-            MessageBox.Show($"Tšekk salvestatud:\n{filePath}");
+            if (kogus > laos)
+            {
+                MessageBox.Show($"Laos on ainult {laos} tk seda toodet!");
+                return;
+            }
+
+            string nimetus = dataGridProducts.CurrentRow.Cells["Toodenimetus"].Value.ToString();
+            decimal hind = Convert.ToDecimal(dataGridProducts.CurrentRow.Cells["Hind"].Value);
+
+            ostuTabel.Rows.Add(nimetus, kogus, hind, hind * kogus);
         }
     }
 }

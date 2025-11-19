@@ -58,7 +58,7 @@
             // 
             // btnLisa
             // 
-            btnLisa.Location = new Point(713, 218);
+            btnLisa.Location = new Point(713, 244);
             btnLisa.Name = "btnLisa";
             btnLisa.Size = new Size(75, 23);
             btnLisa.TabIndex = 2;

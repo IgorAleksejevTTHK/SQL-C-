@@ -51,3 +51,5 @@ C:\Users\opilane\Source\Repos\SQL-C-\epood-igor\obj\Debug\net9.0-windows\epood_i
 C:\Users\opilane\Source\Repos\SQL-C-\epood-igor\bin\Debug\net9.0-windows\BouncyCastle.Cryptography.dll
 C:\Users\opilane\Source\Repos\SQL-C-\epood-igor\bin\Debug\net9.0-windows\itextsharp.dll
 C:\Users\opilane\Source\Repos\SQL-C-\epood-igor\obj\Debug\net9.0-windows\epood_igor.KassaForm.resources
+C:\Users\opilane\source\repos\SQL-C-\epood-igor\obj\Debug\net9.0-windows\epood_igor.LoginForm.resources
+C:\Users\opilane\source\repos\SQL-C-\epood-igor\obj\Debug\net9.0-windows\epood_igor.Menu.resources

@@ -218,7 +218,7 @@
             button1.Name = "button1";
             button1.Size = new Size(75, 23);
             button1.TabIndex = 17;
-            button1.Text = "avaKassa";
+            button1.Text = "Kassa";
             button1.UseVisualStyleBackColor = true;
             button1.Click += button1_Click;
             // 

@@ -240,9 +240,9 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\opilane\\Source\\Repos\\SQL-C-\\epood-igor\\epood-igor.csproj",
+      "projectUniqueName": "C:\\Users\\opilane\\source\\repos\\SQL-C-\\epood-igor\\epood-igor.csproj",
       "projectName": "epood-igor",
-      "projectPath": "C:\\Users\\opilane\\Source\\Repos\\SQL-C-\\epood-igor\\epood-igor.csproj",
+      "projectPath": "C:\\Users\\opilane\\source\\repos\\SQL-C-\\epood-igor\\epood-igor.csproj",
       "packagesPath": "C:\\Users\\opilane\\.nuget\\packages\\",
       "outputPath": "C:\\Users\\opilane\\Source\\Repos\\SQL-C-\\epood-igor\\obj\\",
       "projectStyle": "PackageReference",
